@@ -1,0 +1,10 @@
+spring:
+  application:
+    name: 5-18
+
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/hkt
+    username: root
+    password: rlaeodms0201@
