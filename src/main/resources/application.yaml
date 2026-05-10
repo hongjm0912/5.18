@@ -2,9 +2,16 @@ spring:
   application:
     name: 5-18
 
-
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/hkt
-    username: root
-    password: rlaeodms0201@
+    url: jdbc:mysql://${MYSQLHOST:localhost}:${MYSQLPORT:3307}/${MYSQLDATABASE:sipal}
+    username: ${MYSQLUSER:root}
+    password: ${MYSQLPASSWORD:1234}
+
+  jpa:
+    database-platform: org.hibernate.dialect.MySQLDialect
+    hibernate:
+      ddl-auto: update
+
+server:
+  port: ${PORT:8081}
