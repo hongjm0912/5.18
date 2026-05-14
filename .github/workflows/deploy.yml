@@ -19,5 +19,6 @@ jobs:
             cd ~/backend
             git pull
             ./gradlew bootJar -x test
-            sudo systemctl restart backend
+            cd ~/frontend
+            docker compose -f docker-compose.prod.yml up --build -d backend
             echo "백엔드 배포 완료"
