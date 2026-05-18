@@ -11,20 +11,21 @@ import java.util.List;
 @RequiredArgsConstructor
 public class BoardService {
     private final BoardRepository boardRepository;
+    private final Object positionLock = new Object();
 
-    // 1. 글 저장
     public void savePost(BoardEntity boardEntity) {
-        boardRepository.save(boardEntity);
+        synchronized (positionLock) {
+            boardEntity.setPosition(boardRepository.findMaxPosition() + 1);
+            boardRepository.saveAndFlush(boardEntity);
+        }
     }
 
-    // 2. 특정 위치의 글 조회
     public BoardEntity getPostByPosition(Integer position) {
         return boardRepository.findByPosition(position)
                 .orElse(null);
     }
 
-    // 3. 모든 글 조회 (이 부분이 문제였습니다!)
     public List<BoardEntity> findAll() {
-        return boardRepository.findAll(); // return을 꼭 써주어야 합니다.
+        return boardRepository.findAll();
     }
 }
