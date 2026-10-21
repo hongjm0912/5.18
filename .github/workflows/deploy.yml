@@ -23,7 +23,7 @@ jobs:
             sudo systemctl restart app
             for i in $(seq 1 30); do
               sleep 2
-              if curl -sf -o /dev/null localhost/api/board/list; then echo "백엔드 배포 완료"; exit 0; fi
+              if curl -sf -o /dev/null localhost:8081/api/board/list; then echo "백엔드 배포 완료"; exit 0; fi
             done
             sudo journalctl -u app -n 50 --no-pager
             exit 1
