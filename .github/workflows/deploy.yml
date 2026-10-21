@@ -16,9 +16,14 @@ jobs:
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            cd ~/backend
-            git pull
-            ./gradlew bootJar -x test
-            cd ~/frontend
-            docker compose -f docker-compose.prod.yml up --build -d backend
-            echo "백엔드 배포 완료"
+            set -e
+            cd ~/app
+            git pull --ff-only
+            ./gradlew bootJar -x test --no-daemon
+            sudo systemctl restart app
+            for i in $(seq 1 30); do
+              sleep 2
+              if curl -sf -o /dev/null localhost/api/board/list; then echo "백엔드 배포 완료"; exit 0; fi
+            done
+            sudo journalctl -u app -n 50 --no-pager
+            exit 1
